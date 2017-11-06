@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.laluhilman.titlescroolview.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by laluhilman on 06/11/17.
  */
@@ -25,15 +28,10 @@ public class TitleView extends HorizontalScrollView {
 
     Context context;
     int prevIndex = 0;
-    private TitleAdapter mAdapter;
     private int activeTitle=1;
-    private TitleSelectedListener listener = new TitleSelectedListener() {
-        @Override
-        public void onClick(int position) {
-            addChildView();
-//            setActiveItem(position+1);
-        }
-    };
+    private ArrayList<String> listTitle = new ArrayList<>();
+    private int width;
+
 
     public TitleView(Context context) {
         super(context);
@@ -57,9 +55,11 @@ public class TitleView extends HorizontalScrollView {
     }
 
 
-    public void setAdapter(TitleAdapter mAdapter) {
-        this.mAdapter = mAdapter;
-        this.mAdapter.setReAddItemListener(listener);
+    public void setUpView(ArrayList<String> titleList, int width) {
+        this.listTitle.add("");
+        this.listTitle.addAll(titleList);
+        this.listTitle.add("");
+        this.width = width;
         addChildView();
 
     }
@@ -67,19 +67,20 @@ public class TitleView extends HorizontalScrollView {
 
 
     private void addChildView(){
-        if (getChildCount() == 0 || mAdapter == null)
+        if (getChildCount() == 0 )
             return;
 
         ViewGroup parent = (ViewGroup) getChildAt(0);
         parent.removeAllViews();
 
 
-        for (int i = 0; i < mAdapter.getCount(); i++) {
+        for (int i = 0; i < listTitle.size(); i++) {
             parent.addView(getViewItemPosition(i));
         }
     }
 
     public void setActiveItem(int index) {
+        activeTitle = index;
         ViewGroup parent = (ViewGroup) getChildAt(0);
         View preView = parent.getChildAt(prevIndex);
         android.widget.LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -93,30 +94,30 @@ public class TitleView extends HorizontalScrollView {
         int scrollX = (view.getLeft() - (screenWidth / 2)) + (view.getWidth() / 2);
         this.smoothScrollTo(scrollX, 0);
         prevIndex = index;
+        addChildView();
     }
 
     private View getViewItemPosition(final int position){
-        RelativeLayout layout;
-            layout = (RelativeLayout) View.inflate(context, R.layout.adapter_title, null);
+        RelativeLayout layout = (RelativeLayout) View.inflate(context, R.layout.adapter_title, null);
         Holder holder = new TitleView.Holder();
-            holder.title = (TextView) layout.findViewById(R.id.titleTextView);
-            layout.setTag(holder);
+        holder.title = (TextView) layout.findViewById(R.id.titleTextView);
+        layout.setTag(holder);
 
-        String newsSource = mAdapter.list.get(position);
+        String newsSource = listTitle.get(position);
         holder.title.setText(newsSource);
-        holder.title.setWidth(mAdapter.width);
+        holder.title.setWidth(width);
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                listener.onClick(position);
-//                reAddItemListener.onClick(position);
-//                setActivePosition(position);
-                activeTitle = position;
-                setActiveItem(position);
-                addChildView();
+                if(position!= 0 && position !=listTitle.size()-1){
+                    activeTitle = position;
+                    setActiveItem(position);
+                    addChildView();
 
+                }
             }
         });
+
         holder.title.setTextColor(Color.BLACK);
         if(this.activeTitle == position)
             holder.title.setTextColor(getContext().getResources().getColor(R.color.active_color_title));

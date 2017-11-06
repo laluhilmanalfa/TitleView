@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.laluhilman.titlescroolview.customview.TitleAdapter;
 import com.laluhilman.titlescroolview.customview.TitleSelectedListener;
 import com.laluhilman.titlescroolview.customview.TitleView;
 
@@ -19,15 +18,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private TitleView titleViewDemo;
-    private TitleAdapter adapter;
 
-    private TitleSelectedListener listener = new TitleSelectedListener() {
-        @Override
-        public void onClick(int position) {
-//            titleViewDemo.setActiveItem(position);
 
-        }
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         titleViewDemo = (TitleView) findViewById(R.id.demo_title_view);
-        titleViewDemo.setAdapter(generateAdapter());
+        titleViewDemo.setUpView(generateTitleList(), getWindowManager().getDefaultDisplay().getWidth()/3);
 
 
 
@@ -48,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                titleViewDemo.setActiveItem(3);
             }
         });
     }
@@ -72,12 +66,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-
-    private TitleAdapter generateAdapter(){
-        adapter = new TitleAdapter(getApplicationContext(), generateTitleList(), listener, getWindowManager().getDefaultDisplay().getWidth()/3);
-        return adapter;
     }
 
     private ArrayList<String> generateTitleList(){
