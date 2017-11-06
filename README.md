@@ -27,10 +27,10 @@ This is a Custom View for Title View Pager.
         titleViewDemo = (TitleView) findViewById(R.id.demo_title_view);
         titleViewDemo.setUpView(generateTitleList(), getWindowManager().getDefaultDisplay().getWidth()/3);
         
-        generateTitleList() = ArrayList of String. This is List title.
-        getWindowManager().getDefaultDisplay().getWidth()/3 = Size of each title. Each Title will cosume 1/3 of width screen.
+        // generateTitleList() = ArrayList of String. This is List title.
+        // getWindowManager().getDefaultDisplay().getWidth()/3 = Size of each title. Each Title will cosume 1/3 of width screen.
         
-        
+       For more detail you can see the example in this project. 
 ```
   
 
